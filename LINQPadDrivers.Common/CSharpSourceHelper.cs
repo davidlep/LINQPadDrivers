@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
 using System.Linq;
 
-namespace Davidlep.LINQPadDriver.Common
+namespace Davidlep.LINQPadDrivers.Common
 {
     public static class CSharpSourceHelper
     {

@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\davidlep.SimpleCSVDriver.LINQPadDriver\LINQPadDrivers.SimpleCSVDriver.csproj" />
+    <ProjectReference Include="..\LINQPadDrivers.SimpleCSVDriver\LINQPadDrivers.SimpleCSVDriver.csproj" />
   </ItemGroup>
 
 </Project>
