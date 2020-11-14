@@ -1,88 +1,59 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using Davidlep.LINQPadDriver.Common;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace davidlep.SimpleCSVDriver.LINQPadDriver
+namespace Davidlep.LINQPadDrivers.SimpleCSVDriver
 {
-    public class SourceGenerator
+    public static class SourceGenerator
     {
-        public string GenerateSource(string nameSpace, string typeName, string[] csvHeaderNames, string csvFilePath)
+        private static string DataProviderIdentifier = "Davidlep.LINQPadDrivers.SimpleCSVDriver.DataProvider";
+        private static string[] Imports = new[]
+        {
+            "System",
+            "System.Collections.Generic",
+            "System.Linq",
+            "System.Globalization",
+            "System.IO",
+            "CsvHelper",
+            "CsvHelper.Configuration.Attributes",
+        };
+
+        public static string GenerateSource(string nameSpace, string typeName, string[] csvHeaderNames, string csvFilePath)
         {
             return
 
-          @"using System;
-            using System.Collections.Generic;
-            using System.Linq;
-            using System.Globalization;
-            using System.IO;
-            using CsvHelper;
-            using CsvHelper.Configuration.Attributes;
+            $"{GenerateImports(Imports)}" + @"
 
             namespace " + nameSpace + @"
             {
 	            public class " + typeName + @"
 	            {
-		          " + "public IEnumerable<Record> Records => GetRecordsCSV<Record>(@\"" + csvFilePath + "\"" + @");
-
-                    private IEnumerable<TRecord> GetRecordsCSV<TRecord>(string filepath)
-                    {
-	                    using (var sr = new StreamReader(filepath))
-	                    using (var reader = new CsvReader(sr, CultureInfo.InvariantCulture))
-	                    {
-                            reader.Configuration.BadDataFound = context => { };
-
-		                    foreach (var record in reader.GetRecords<TRecord>())
-		                    {
-			                    yield return record;
-		                    }
-	                    }
-                    }
+		            " + "public IEnumerable<Record> Records => " + DataProviderIdentifier + ".GetRecordsCSV<Record>(@\"" + csvFilePath + "\"" + @");
 	            }
 
 	            public class Record    
 	            {
-                " + GeneratePropertiesSource(csvHeaderNames) + @"
+                    " + GeneratePropertiesSource(csvHeaderNames) + @"
 	            }
             }";
         }
 
-        private string GeneratePropertiesSource(string[] csvHeaderNames)
+        private static string GenerateImports(string[] imports)
         {
-            List<string> propertiesWithAttributeSources = new List<string>();
+            return string.Join("\r\n", imports.Select(x => $"using {x};"));
+        }
+
+        private static string GeneratePropertiesSource(string[] csvHeaderNames)
+        {
+            var propertiesWithAttributeSources = new List<string>();
 
             for (int i = 0; i < csvHeaderNames.Length; i++)
             {
-                propertiesWithAttributeSources.Add($"   [Name(\"{SanitizeStringForCsharpString(csvHeaderNames[i])}\")]");
-                propertiesWithAttributeSources.Add("	public string " + SanitizeStringForCSharpIdentifier(csvHeaderNames[i], $"Header{i}") + " { get; set; }");
+                propertiesWithAttributeSources.Add($"   [Name(\"{CSharpSourceHelper.SanitizeStringForCsharpString(csvHeaderNames[i])}\")]");
+                propertiesWithAttributeSources.Add("	public string " + CSharpSourceHelper.SanitizeStringForCSharpIdentifier(csvHeaderNames[i], $"Header{i}") + " { get; set; }");
             }
 
             return string.Join("\r\n", propertiesWithAttributeSources);
-        }
-
-        private string SanitizeStringForCsharpString(string str, string fallback = "")
-        {
-            return str.Replace("\"",@"\" + "\"");
-        }
-
-        private string SanitizeStringForCSharpIdentifier(string str, string fallback = "")
-        {
-            if (SyntaxFacts.IsReservedKeyword(SyntaxFacts.GetKeywordKind(str)))
-                return $"@{str}";
-
-            if (SyntaxFacts.IsValidIdentifier(str))
-                return str;
-
-            if (string.IsNullOrWhiteSpace(str))
-                return fallback;
-
-            if (!SyntaxFacts.IsIdentifierStartCharacter(str[0]))
-                str = $"_{str}";
-
-            var sanitizedString = new string(str
-                .Where(c => SyntaxFacts.IsIdentifierPartCharacter(c))
-                .ToArray());
-
-            return SyntaxFacts.IsValidIdentifier(sanitizedString) ? sanitizedString : fallback;
         }
     }
 }

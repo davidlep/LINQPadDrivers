@@ -2,7 +2,7 @@ using LINQPad.Extensibility.DataContext;
 using System.ComponentModel;
 using System.Xml.Linq;
 
-namespace davidlep.SimpleCSVDriver.LINQPadDriver
+namespace Davidlep.LINQPadDrivers.SimpleCSVDriver
 {
     class ConnectionProperties : INotifyPropertyChanged
 	{

@@ -2,18 +2,25 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWpf>true</UseWpf>
-    <AssemblyName>davidlep.SimpleCSVDriver.LINQPadDriver</AssemblyName>
+    <AssemblyName>Davidlep.LINQPadDriver.SimpleCSVDriver</AssemblyName>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>linqpad-driver</PackageTags>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants>NETCORE</DefineConstants>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PackageId>davidlep.SimpleCSVDriver.LINQPadDriver</PackageId>
+    <Authors>David Lépine</Authors>
+    <Company />
+    <RootNamespace>Davidlep.LINQPadDrivers.SimpleCSVDriver</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="15.0.10" />
     <PackageReference Include="LINQPad.Reference" Version="1.*" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SourcesHelper\LINQPadDrivers.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="ConnectionDialog.xaml">

@@ -12,12 +12,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace davidlep.SimpleCSVDriver.LINQPadDriver
+namespace Davidlep.LINQPadDrivers.SimpleCSVDriver
 {
-    public class CSVDynamicDriver : DynamicDataContextDriver
+    public class DynamicDriver : DynamicDataContextDriver
 	{
         #region Debug
-        static CSVDynamicDriver()
+        static DynamicDriver()
         {
             // Uncomment the following code to attach to Visual Studio's debugger when an exception is thrown.
             //AppDomain.CurrentDomain.FirstChanceException += (sender, args) =>
@@ -52,7 +52,7 @@ namespace davidlep.SimpleCSVDriver.LINQPadDriver
             var filePath = connectionProperties.FilePath;
 
             var headers = GetCSVHeaders(filePath);
-            string source = new SourceGenerator().GenerateSource(nameSpace, typeName, headers, filePath);
+            string source = SourceGenerator.GenerateSource(nameSpace, typeName, headers, filePath);
             Compile(source, assemblyToBuild.CodeBase);
 
             // Tell LINQPad what to display in the TreeView on the left (Schema Explorer):
@@ -81,18 +81,22 @@ namespace davidlep.SimpleCSVDriver.LINQPadDriver
             return headerNames.Select(x => x.Value.ToString()).ToArray();
         }
 
-        static void Compile(string cSharpSourceCode, string outputFile)
+        internal static string[] GetCompileAssemblies()
         {
-            var csvHelperAssembly = Assembly.GetAssembly(typeof(CsvReader)).Location;
-            var microsoftCodeAnalysisAssembly = Assembly.GetAssembly(typeof(SyntaxFacts)).Location;
+            var csvHelperAssembly               = Assembly.GetAssembly(typeof(CsvReader)).Location;
+            var microsoftCodeAnalysisAssembly   = Assembly.GetAssembly(typeof(SyntaxFacts)).Location;
+            var dataProviderAssembly            = Assembly.GetAssembly(typeof(DataProvider)).Location;
 
-            string[] assembliesToReference = GetCoreFxReferenceAssemblies()
-                .Concat(new[] { csvHelperAssembly, microsoftCodeAnalysisAssembly })
+            return GetCoreFxReferenceAssemblies()
+                .Concat(new[] { csvHelperAssembly, microsoftCodeAnalysisAssembly, dataProviderAssembly })
                 .ToArray();
+        }
 
+        internal static void Compile(string cSharpSourceCode, string outputFile)
+        {
             var compileResult = CompileSource(new CompilationInput
             {
-                FilePathsToReference = assembliesToReference.Concat(new[] { csvHelperAssembly }).ToArray(),
+                FilePathsToReference = GetCompileAssemblies(),
                 OutputPath = outputFile,
                 SourceCode = new[] { cSharpSourceCode }
             });
