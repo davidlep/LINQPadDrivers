@@ -1,21 +1,19 @@
-using CsvHelper;
-using CsvHelper.Configuration.Attributes;
 using Davidlep.LINQPadDrivers.Common;
 using LINQPad.Extensibility.DataContext;
 using Microsoft.CodeAnalysis.CSharp;
-using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Dynamic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
+namespace Davidlep.LINQPadDrivers.SimpleJsonDriver
 {
     public class DynamicDriver : DynamicDataContextDriver
-	{
+    {
         #region Debug
         static DynamicDriver()
         {
@@ -28,7 +26,7 @@ namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
         }
         #endregion
 
-        public override string Name => "Simple CSV Driver";
+        public override string Name => "Simple JSON Driver";
         public override string Author => "David Lépine";
 
         public override string GetConnectionDescription(IConnectionInfo connectionInfo)
@@ -50,19 +48,19 @@ namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
             var connectionProperties = new ConnectionProperties(connectionInfo);
             var filePath = connectionProperties.FilePath;
 
-            var dataSourceHeaders = GetCSVHeaders(filePath);
+            var dataSourceHeaders = GetJsonProperties(filePath);
             var dataSourceName = "Records";
-           
+
             var generatorInput = SourceGeneratorInputFactory.CreateInput(filePath, dataSourceName);
             var generator = new CSharpSourceGenerator(generatorInput);
 
             string source = generator.GenerateSource(nameSpace, typeName, dataSourceHeaders);
 
-            var csvHelperAssembly               = Assembly.GetAssembly(typeof(CsvReader)).Location;
-            var microsoftCodeAnalysisAssembly   = Assembly.GetAssembly(typeof(SyntaxFacts)).Location;
-            var dataProviderAssembly            = Assembly.GetAssembly(typeof(DataProvider)).Location;
+            var newtonsoftAssembly = Assembly.GetAssembly(typeof(JsonSerializer)).Location;
+            var microsoftCodeAnalysisAssembly = Assembly.GetAssembly(typeof(SyntaxFacts)).Location;
+            var dataProviderAssembly = Assembly.GetAssembly(typeof(DataProvider)).Location;
 
-            var referencedAssemblies = new[] { csvHelperAssembly, microsoftCodeAnalysisAssembly, dataProviderAssembly };
+            var referencedAssemblies = new[] { newtonsoftAssembly, microsoftCodeAnalysisAssembly, dataProviderAssembly };
 
             CSharpSourceCompiler.Compile(source, assemblyToBuild.CodeBase, referencedAssemblies);
 
@@ -77,19 +75,12 @@ namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
             return new[] { schema }.ToList();
         }
 
-        private string[] GetCSVHeaders(string filePath)
+        private string[] GetJsonProperties(string filePath)
         {
-            ExpandoObject headerNames;
-
-            using (var reader = new StreamReader(filePath))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                csv.Configuration.BadDataFound = context => { };
-                csv.Configuration.HasHeaderRecord = false;
-                headerNames = csv.GetRecords<object>().First() as ExpandoObject;
-            }
-
-            return headerNames.Select(x => x.Value.ToString()).ToArray();
+            return DataProvider.GetRecordsJson<ExpandoObject>(filePath)
+                .SelectMany(x => (x as IDictionary<string, object>).Keys)
+                .Distinct()
+                .ToArray();
         }
     }
 }

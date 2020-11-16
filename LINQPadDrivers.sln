@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30709.132
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINQPadDrivers.SimpleCSVDriver", "LINQPadDrivers.SimpleCSVDriver\LINQPadDrivers.SimpleCSVDriver.csproj", "{6601F920-7D9A-4E6C-B70B-B5C0454A0E03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINQPadDrivers.SimpleCsvDriver", "LINQPadDrivers.SimpleCSVDriver\LINQPadDrivers.SimpleCsvDriver.csproj", "{6601F920-7D9A-4E6C-B70B-B5C0454A0E03}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINQPadDrivers.Common", "LINQPadDrivers.Common\LINQPadDrivers.Common.csproj", "{7349FD04-5DB1-4F8C-9CBF-6273F41CF5BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQPadDrivers.SimpleCSVDriver.Tests", "LINQPadDrivers.SimpleCSVDriver.Tests\LINQPadDrivers.SimpleCSVDriver.Tests.csproj", "{869FAB18-0BA1-4F56-B1CB-17030FCA513B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINQPadDrivers.SimpleJsonDriver", "LINQPadDrivers.SimpleJsonDriver\LINQPadDrivers.SimpleJsonDriver.csproj", "{61434533-4BC0-444C-86D3-7B7969D08060}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{7349FD04-5DB1-4F8C-9CBF-6273F41CF5BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7349FD04-5DB1-4F8C-9CBF-6273F41CF5BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7349FD04-5DB1-4F8C-9CBF-6273F41CF5BF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{869FAB18-0BA1-4F56-B1CB-17030FCA513B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{869FAB18-0BA1-4F56-B1CB-17030FCA513B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{869FAB18-0BA1-4F56-B1CB-17030FCA513B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{869FAB18-0BA1-4F56-B1CB-17030FCA513B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61434533-4BC0-444C-86D3-7B7969D08060}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61434533-4BC0-444C-86D3-7B7969D08060}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61434533-4BC0-444C-86D3-7B7969D08060}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61434533-4BC0-444C-86D3-7B7969D08060}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

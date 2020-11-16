@@ -5,7 +5,7 @@ namespace Davidlep.LINQPadDrivers.Common
 {
     public static class CSharpSourceHelper
     {
-        public static string SanitizeStringForCsharpString(string str, string fallback = "")
+        public static string SanitizeStringForCSharpString(string str, string fallback = "")
         {
             return str.Replace("\"", @"\" + "\"");
         }

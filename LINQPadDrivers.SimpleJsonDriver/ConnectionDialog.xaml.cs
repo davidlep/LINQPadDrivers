@@ -3,7 +3,7 @@ using System.Windows;
 using LINQPad.Extensibility.DataContext;
 using Microsoft.Win32;
 
-namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
+namespace Davidlep.LINQPadDrivers.SimpleJsonDriver
 {
     public partial class ConnectionDialog : Window
 	{
@@ -25,7 +25,7 @@ namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
 		{
 			var openFileDialog = new OpenFileDialog
 			{
-				Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
+				Filter = "Json files (*.json)|*.json|All files (*.*)|*.*"
 			};
 
 			if (openFileDialog.ShowDialog() == true)
