@@ -9,7 +9,7 @@ namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
             return new CSharpSourceGeneratorInput()
             {
                 DataContextTypeName = "Record",
-                DataContextTypePropertiesType = "string",
+                DataContextTypeDefaultPropertiesType = "string",
                 DataProviderFullIdentifier = "Davidlep.LINQPadDrivers.SimpleCsvDriver.DataProvider",
                 DataProviderMethod = "GetRecordsCsv",
                 DataSourceFilePath = csvFilePath,

@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
+using System;
 using System.Linq;
 
 namespace Davidlep.LINQPadDrivers.Common
@@ -29,6 +30,22 @@ namespace Davidlep.LINQPadDrivers.Common
                 .ToArray());
 
             return SyntaxFacts.IsValidIdentifier(sanitizedString) ? sanitizedString : fallback;
+        }
+
+        public static string TryInferredCSharpType(object value)
+        {
+            var str = value.ToString();
+
+            if (double.TryParse(str, out _))
+                return "double";
+
+            if (Guid.TryParse(str, out _))
+                return "Guid";
+
+            if (DateTime.TryParse(str, out _))
+                return "DateTime";
+
+            return null;
         }
     }
 }

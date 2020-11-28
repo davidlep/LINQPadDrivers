@@ -8,7 +8,7 @@ namespace Davidlep.LINQPadDrivers.Common
         public string DataProviderFullIdentifier { get; set; }
         public string DataProviderMethod { get; set; }
         public string DataContextTypeName { get; set; }
-        public string DataContextTypePropertiesType { get; set; }
+        public string DataContextTypeDefaultPropertiesType { get; set; }
         public string DataSourceMemberName { get; set; }
         public string DataSourceFilePath { get; set; }
 

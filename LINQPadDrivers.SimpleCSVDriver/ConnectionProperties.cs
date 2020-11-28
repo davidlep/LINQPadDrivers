@@ -1,5 +1,6 @@
 using LINQPad.Extensibility.DataContext;
 using System.ComponentModel;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
@@ -13,6 +14,9 @@ namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
 		public ConnectionProperties(IConnectionInfo connectionInfo)
 		{
 			ConnectionInfo = connectionInfo;
+
+			if (!connectionInfo.DriverData.Elements("UseTypeInference").Any())
+				this.UseTypeInference = true;
 		}
 
 		public string FilePath
@@ -22,6 +26,16 @@ namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
 			{
 				DriverData.SetElementValue(nameof(FilePath), value);
 				OnPropertyChanged(nameof(FilePath));
+			}
+		}
+
+		public bool UseTypeInference
+		{
+			get => (bool)DriverData.Element(nameof(UseTypeInference));
+			set
+			{
+				DriverData.SetElementValue(nameof(UseTypeInference), value);
+				OnPropertyChanged(nameof(UseTypeInference));
 			}
 		}
 

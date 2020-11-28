@@ -9,7 +9,7 @@ namespace Davidlep.LINQPadDrivers.SimpleJsonDriver
             return new CSharpSourceGeneratorInput()
             {
                 DataContextTypeName = "Record",
-                DataContextTypePropertiesType = "dynamic",
+                DataContextTypeDefaultPropertiesType = "dynamic",
                 DataProviderFullIdentifier = "Davidlep.LINQPadDrivers.SimpleJsonDriver.DataProvider",
                 DataProviderMethod = "GetRecordsJson",
                 DataSourceFilePath = jsonFilePath,

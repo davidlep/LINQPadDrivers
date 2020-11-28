@@ -1,5 +1,4 @@
-﻿using Davidlep.LINQPadDrivers.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Davidlep.LINQPadDrivers.Common
@@ -13,7 +12,7 @@ namespace Davidlep.LINQPadDrivers.Common
             this.input = input;
         }
 
-        public string GenerateSource(string nameSpace, string typeName, string[] propertyNames)
+        public string GenerateSource(string nameSpace, string typeName, PropertyModel[] propertyModels)
         {
             return
 
@@ -28,7 +27,7 @@ namespace Davidlep.LINQPadDrivers.Common
 
 	            public class "+ input.DataContextTypeName + @"    
 	            {
-                    " + GeneratePropertiesSource(propertyNames) + @"
+                    " + GeneratePropertiesSource(propertyModels) + @"
 	            }
             }";
         }
@@ -38,14 +37,14 @@ namespace Davidlep.LINQPadDrivers.Common
             return string.Join("\r\n", imports.Select(x => $"using {x};"));
         }
 
-        private string GeneratePropertiesSource(string[] propertyNames)
+        private string GeneratePropertiesSource(PropertyModel[] propertyModels)
         {
             var propertiesWithAttributeSources = new List<string>();
 
-            for (int i = 0; i < propertyNames.Length; i++)
+            for (int i = 0; i < propertyModels.Length; i++)
             {
-                propertiesWithAttributeSources.Add(input.PropertyAttributeGenerator(propertyNames[i]));
-                propertiesWithAttributeSources.Add("	public "+ input.DataContextTypePropertiesType + " " + CSharpSourceHelper.SanitizeStringForCSharpIdentifier(propertyNames[i], $"Property{i}") + " { get; set; }");
+                propertiesWithAttributeSources.Add(input.PropertyAttributeGenerator(propertyModels[i].RecordHeaderName));
+                propertiesWithAttributeSources.Add("	public "+ (propertyModels[i].CSharpType ?? input.DataContextTypeDefaultPropertiesType) + " " + CSharpSourceHelper.SanitizeStringForCSharpIdentifier(propertyModels[i].RecordHeaderName, $"Property{i}") + " { get; set; }");
             }
 
             return string.Join("\r\n", propertiesWithAttributeSources);

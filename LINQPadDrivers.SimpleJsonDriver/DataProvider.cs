@@ -9,18 +9,17 @@ namespace Davidlep.LINQPadDrivers.SimpleJsonDriver
     {
 		public static IEnumerable<TRecord> GetRecordsJson<TRecord>(string filepath)
 		{
-			using (var sr = new StreamReader(filepath))
-			using (var reader = new JsonTextReader(sr))
-			{
-				reader.SupportMultipleContent = true;
+			using var sr = new StreamReader(filepath);
+			using var reader = new JsonTextReader(sr);
 
-				var serializer = new JsonSerializer();
-				while (reader.Read())
+			reader.SupportMultipleContent = true;
+
+			var serializer = new JsonSerializer();
+			while (reader.Read())
+			{
+				if (reader.TokenType == JsonToken.StartObject)
 				{
-					if (reader.TokenType == JsonToken.StartObject)
-					{
-						yield return serializer.Deserialize<TRecord>(reader);
-					}
+					yield return serializer.Deserialize<TRecord>(reader);
 				}
 			}
 		}

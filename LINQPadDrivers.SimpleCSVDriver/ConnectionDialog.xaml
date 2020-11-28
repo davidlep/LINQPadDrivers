@@ -15,6 +15,15 @@
             <TextBox DockPanel.Dock="Left" HorizontalAlignment="Stretch" Name="txtFilePath" Padding="2" Margin="0,0,0,0" Text="{Binding Path=FilePath, Mode=TwoWay}"/>
         </DockPanel>
 
+        <Label Padding="0,0,0,2">Options:</Label>
+        <DockPanel LastChildFill="False" Margin="0,0,0,10">
+            <CheckBox IsChecked="{Binding UseTypeInference}" Content="Try to determine the type of each property" Name="chkTypeInference"/>
+            <Image Source="icons\info.png" Width="16" Margin="5,0,0,00">
+                <Image.ToolTip>
+                    <ToolTip Content="Disable this option if you want to have the raw data. This option may be slow with large dataset." />
+                </Image.ToolTip>
+            </Image>
+        </DockPanel>
         <DockPanel LastChildFill="False" Margin="0,15,0,0">
             <CheckBox IsChecked="{Binding ConnectionInfo.Persist}" VerticalAlignment="Center">Remember this connection</CheckBox>
             <Button Name="btnCancel" DockPanel.Dock="Right" Content="Cancel" Margin="6,0,0,0" Padding="10,3" MinWidth="80" IsCancel="True" TabIndex="3" />

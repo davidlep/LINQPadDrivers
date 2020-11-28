@@ -14,18 +14,6 @@ namespace Davidlep.LINQPadDrivers.SimpleJsonDriver
 {
     public class DynamicDriver : DynamicDataContextDriver
     {
-        #region Debug
-        static DynamicDriver()
-        {
-            // Uncomment the following code to attach to Visual Studio's debugger when an exception is thrown.
-            //AppDomain.CurrentDomain.FirstChanceException += (sender, args) =>
-            //{
-            //	if (args.Exception.StackTrace.Contains (typeof (DynamicDemoDriver).Namespace))
-            //		Debugger.Launch ();
-            //};
-        }
-        #endregion
-
         public override string Name => "Simple JSON Driver";
         public override string Author => "David Lépine";
 
@@ -48,13 +36,13 @@ namespace Davidlep.LINQPadDrivers.SimpleJsonDriver
             var connectionProperties = new ConnectionProperties(connectionInfo);
             var filePath = connectionProperties.FilePath;
 
-            var dataSourceHeaders = GetJsonProperties(filePath);
+            var dataSourceProperties = GetJsonProperties(filePath).Select(x => new PropertyModel { RecordHeaderName = x }).ToArray();
             var dataSourceName = "Records";
 
             var generatorInput = SourceGeneratorInputFactory.CreateInput(filePath, dataSourceName);
             var generator = new CSharpSourceGenerator(generatorInput);
 
-            string source = generator.GenerateSource(nameSpace, typeName, dataSourceHeaders);
+            string source = generator.GenerateSource(nameSpace, typeName, dataSourceProperties);
 
             var newtonsoftAssembly = Assembly.GetAssembly(typeof(JsonSerializer)).Location;
             var microsoftCodeAnalysisAssembly = Assembly.GetAssembly(typeof(SyntaxFacts)).Location;
@@ -69,7 +57,7 @@ namespace Davidlep.LINQPadDrivers.SimpleJsonDriver
             {
                 IsEnumerable = true,
                 DragText = dataSourceName,
-                Children = dataSourceHeaders.Select(x => new ExplorerItem(x, ExplorerItemKind.Property, ExplorerIcon.Column)).ToList()
+                Children = dataSourceProperties.Select(x => new ExplorerItem(x.RecordHeaderName, ExplorerItemKind.Property, ExplorerIcon.Column)).ToList()
             };
 
             return new[] { schema }.ToList();

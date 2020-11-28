@@ -13,11 +13,17 @@
     <Authors>David Lépine</Authors>
     <Company />
     <RootNamespace>Davidlep.LINQPadDrivers.SimpleCsvDriver</RootNamespace>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="icons\info.png" />
+    <None Remove="icons\warn.png" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="15.0.10" />
     <PackageReference Include="LINQPad.Reference" Version="1.*" />
@@ -30,6 +36,10 @@
     <None Update="ConnectionDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\info.png" />
+    <Resource Include="icons\warn.png" />
   </ItemGroup>
   <Target Name="PostBuild1" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy /i/y/s &quot;$(TargetDir)*.*&quot; &quot;%25LocalAppData%25\\LINQPad\\Drivers\\DataContext\\NetCore\\$(TargetName)&quot;" />

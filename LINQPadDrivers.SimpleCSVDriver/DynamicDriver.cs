@@ -1,11 +1,10 @@
 using CsvHelper;
-using CsvHelper.Configuration.Attributes;
 using Davidlep.LINQPadDrivers.Common;
 using LINQPad.Extensibility.DataContext;
 using Microsoft.CodeAnalysis.CSharp;
-using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Globalization;
 using System.IO;
@@ -16,18 +15,6 @@ namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
 {
     public class DynamicDriver : DynamicDataContextDriver
 	{
-        #region Debug
-        static DynamicDriver()
-        {
-            // Uncomment the following code to attach to Visual Studio's debugger when an exception is thrown.
-            //AppDomain.CurrentDomain.FirstChanceException += (sender, args) =>
-            //{
-            //	if (args.Exception.StackTrace.Contains (typeof (DynamicDemoDriver).Namespace))
-            //		Debugger.Launch ();
-            //};
-        }
-        #endregion
-
         public override string Name => "Simple CSV Driver";
         public override string Author => "David Lépine";
 
@@ -50,13 +37,13 @@ namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
             var connectionProperties = new ConnectionProperties(connectionInfo);
             var filePath = connectionProperties.FilePath;
 
-            var dataSourceHeaders = GetCSVHeaders(filePath);
+            var dataSourceProperties = GetPropertyModels(filePath, connectionProperties.UseTypeInference);
             var dataSourceName = "Records";
            
             var generatorInput = SourceGeneratorInputFactory.CreateInput(filePath, dataSourceName);
             var generator = new CSharpSourceGenerator(generatorInput);
 
-            string source = generator.GenerateSource(nameSpace, typeName, dataSourceHeaders);
+            string source = generator.GenerateSource(nameSpace, typeName, dataSourceProperties);
 
             var csvHelperAssembly               = Assembly.GetAssembly(typeof(CsvReader)).Location;
             var microsoftCodeAnalysisAssembly   = Assembly.GetAssembly(typeof(SyntaxFacts)).Location;
@@ -71,25 +58,58 @@ namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
             {
                 IsEnumerable = true,
                 DragText = dataSourceName,
-                Children = dataSourceHeaders.Select(x => new ExplorerItem(x, ExplorerItemKind.Property, ExplorerIcon.Column)).ToList()
+                Children = dataSourceProperties.Select(x => new ExplorerItem(x.RecordHeaderName, ExplorerItemKind.Property, ExplorerIcon.Column)).ToList()
             };
 
             return new[] { schema }.ToList();
         }
 
-        private string[] GetCSVHeaders(string filePath)
+        private PropertyModel[] GetPropertyModels(string filePath, bool useTypeInference)
         {
             ExpandoObject headerNames;
 
-            using (var reader = new StreamReader(filePath))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            using var reader = new StreamReader(filePath);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            
+            csv.Configuration.BadDataFound = context => { };
+            csv.Configuration.HasHeaderRecord = false;
+            headerNames = csv.GetRecords<object>().First() as ExpandoObject;
+
+            var propertiesModels = headerNames.Select(x => new PropertyModel { RecordHeaderName = x.Value.ToString() }).ToArray();
+
+            if(!useTypeInference)
+                return propertiesModels;
+
+            var records = csv.GetRecords<object>().Cast<IDictionary<string, object>>().ToArray();
+
+            foreach (var record in records)
             {
-                csv.Configuration.BadDataFound = context => { };
-                csv.Configuration.HasHeaderRecord = false;
-                headerNames = csv.GetRecords<object>().First() as ExpandoObject;
+                for (int i = 0; i < record.Count; i++)
+                {
+                    if (propertiesModels[i].TypeInferenceState == TypeInferenceStates.MultipleTypes)
+                        continue;
+
+                    var previousState = propertiesModels[i].TypeInferenceState;
+                    var previousType = propertiesModels[i].CSharpType;
+
+                    var inferredType = CSharpSourceHelper.TryInferredCSharpType(record.ElementAt(i).Value);
+
+                    if (inferredType == null)
+                        continue;
+
+                    if (previousState == TypeInferenceStates.Inferred && previousType != inferredType)
+                    {
+                        propertiesModels[i].TypeInferenceState = TypeInferenceStates.MultipleTypes;
+                        propertiesModels[i].CSharpType = null;
+                        continue;
+                    }
+
+                    propertiesModels[i].CSharpType = inferredType;
+                    propertiesModels[i].TypeInferenceState = TypeInferenceStates.Inferred;
+                }
             }
 
-            return headerNames.Select(x => x.Value.ToString()).ToArray();
+            return propertiesModels;
         }
     }
 }
