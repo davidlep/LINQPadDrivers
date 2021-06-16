@@ -41,6 +41,11 @@
     <Resource Include="icons\info.png" />
     <Resource Include="icons\warn.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Page Update="NewConnectionDialog.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+  </ItemGroup>
   <Target Name="PostBuild1" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy /i/y/s &quot;$(TargetDir)*.*&quot; &quot;%25LocalAppData%25\\LINQPad\\Drivers\\DataContext\\NetCore\\$(TargetName)&quot;" />
   </Target>
