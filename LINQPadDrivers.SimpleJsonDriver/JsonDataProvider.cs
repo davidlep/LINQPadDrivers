@@ -1,15 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using Davidlep.LINQPadDrivers.Common;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 namespace Davidlep.LINQPadDrivers.SimpleJsonDriver
 {
-    public static class DataProvider
-    {
-		public static IEnumerable<TRecord> GetRecordsJson<TRecord>(string filepath)
+    public class JsonDataProvider<TRecord> : BaseDataProvider<TRecord>
+	{
+		public override IEnumerable<TRecord> GetRecords(StreamReader sr)
 		{
-			using var sr = new StreamReader(filepath);
 			using var reader = new JsonTextReader(sr);
 
 			reader.SupportMultipleContent = true;

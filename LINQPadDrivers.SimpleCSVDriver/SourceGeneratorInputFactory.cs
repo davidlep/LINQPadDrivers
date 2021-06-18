@@ -1,4 +1,4 @@
-﻿using Davidlep.LINQPadDrivers.Common;
+﻿using Davidlep.LINQPadDrivers.Common.SourceGeneration;
 
 namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
 {
@@ -12,7 +12,7 @@ namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
                 DataContextTypeDefaultPropertiesType = "string",
                 DataProviderFullIdentifier = "Davidlep.LINQPadDrivers.SimpleCsvDriver.DataProvider",
                 DataProviderMethod = "GetRecordsCsv",
-                DataSourceFilePath = csvFilePath,
+                DataSourceFilePath = csvFilePath,//Genre pour parameter
                 DataSourceMemberName = dataSourceName,
                 PropertyAttributeGenerator = (prop) => $"   [Name(\"{CSharpSourceHelper.SanitizeStringForCSharpString(prop)}\")]",
                 Imports = new[]

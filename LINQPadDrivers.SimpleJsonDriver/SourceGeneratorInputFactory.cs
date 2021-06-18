@@ -1,4 +1,4 @@
-﻿using Davidlep.LINQPadDrivers.Common;
+﻿using Davidlep.LINQPadDrivers.Common.SourceGeneration;
 
 namespace Davidlep.LINQPadDrivers.SimpleJsonDriver
 {

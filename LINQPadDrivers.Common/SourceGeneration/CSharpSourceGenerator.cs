@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Davidlep.LINQPadDrivers.Common
+namespace Davidlep.LINQPadDrivers.Common.SourceGeneration
 {
     public class CSharpSourceGenerator
     {
@@ -22,7 +22,9 @@ namespace Davidlep.LINQPadDrivers.Common
             {
 	            public class " + typeName + @"
 	            {
-		            " + "public IEnumerable<"+ input.DataContextTypeName + "> " + input.DataSourceMemberName + " => " + input.DataProviderFullIdentifier + "." + input.DataProviderMethod + "<"+ input.DataContextTypeName + ">(@\"" + input.DataSourceFilePath + "\"" + @");
+                    public "+ input.DataProviderFullIdentifier + "<" + input.DataContextTypeName + "> " + @"DataProvider = new " + input.DataProviderFullIdentifier + "<" + input.DataContextTypeName + "> " + @"();
+
+                    public IEnumerable<" + input.DataContextTypeName + "> " + input.DataSourceMemberName + " => " + input.DataProviderFullIdentifier + "." + input.DataProviderMethod + "<"+ input.DataContextTypeName + ">(@\"" + input.DataSourceFilePath + "\"" + @");
 	            }
 
 	            public class "+ input.DataContextTypeName + @"    

@@ -1,4 +1,5 @@
 using Davidlep.LINQPadDrivers.Common;
+using Davidlep.LINQPadDrivers.Common.SourceGeneration;
 using LINQPad.Extensibility.DataContext;
 using Microsoft.CodeAnalysis.CSharp;
 using Newtonsoft.Json;
@@ -16,6 +17,7 @@ namespace Davidlep.LINQPadDrivers.SimpleJsonDriver
     {
         public override string Name => "Simple JSON Driver";
         public override string Author => "David Lépine";
+        public JsonDataProvider<ExpandoObject> DataProvider = new JsonDataProvider<ExpandoObject>();
 
         public override string GetConnectionDescription(IConnectionInfo connectionInfo)
         {
@@ -46,7 +48,7 @@ namespace Davidlep.LINQPadDrivers.SimpleJsonDriver
 
             var newtonsoftAssembly = Assembly.GetAssembly(typeof(JsonSerializer)).Location;
             var microsoftCodeAnalysisAssembly = Assembly.GetAssembly(typeof(SyntaxFacts)).Location;
-            var dataProviderAssembly = Assembly.GetAssembly(typeof(DataProvider)).Location;
+            var dataProviderAssembly = Assembly.GetAssembly(typeof(JsonDataProvider<ExpandoObject>)).Location;
 
             var referencedAssemblies = new[] { newtonsoftAssembly, microsoftCodeAnalysisAssembly, dataProviderAssembly };
 
@@ -65,7 +67,7 @@ namespace Davidlep.LINQPadDrivers.SimpleJsonDriver
 
         private string[] GetJsonProperties(string filePath)
         {
-            return DataProvider.GetRecordsJson<ExpandoObject>(filePath)
+            return DataProvider.GetRecordsFromFile(filePath)
                 .SelectMany(x => (x as IDictionary<string, object>).Keys)
                 .Distinct()
                 .ToArray();

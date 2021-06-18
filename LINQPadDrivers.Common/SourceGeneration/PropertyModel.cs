@@ -1,4 +1,4 @@
-﻿namespace Davidlep.LINQPadDrivers.Common
+﻿namespace Davidlep.LINQPadDrivers.Common.SourceGeneration
 {
     public class PropertyModel
     {

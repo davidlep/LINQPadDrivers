@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace Davidlep.LINQPadDrivers.Common
+namespace Davidlep.LINQPadDrivers.Common.SourceGeneration
 {
     public static class CSharpSourceHelper
     {
