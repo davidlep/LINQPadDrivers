@@ -1,5 +1,6 @@
 using CsvHelper;
 using Davidlep.LINQPadDrivers.Common;
+using Davidlep.LINQPadDrivers.Common.SourceGeneration;
 using LINQPad.Extensibility.DataContext;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
             return new FileInfo(filepath).Name;
         }
 
-        public override bool ShowConnectionDialog(IConnectionInfo connectionInfo, ConnectionDialogOptions dialogOptions) => new ConnectionDialog(connectionInfo).ShowDialog() == true;
+        public override bool ShowConnectionDialog(IConnectionInfo connectionInfo, ConnectionDialogOptions dialogOptions) => new DataSourcesConnectionDialog(connectionInfo).ShowDialog() == true;
 
         public override List<ExplorerItem> GetSchemaAndBuildAssembly(
             IConnectionInfo connectionInfo,
@@ -47,7 +48,7 @@ namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
 
             var csvHelperAssembly               = Assembly.GetAssembly(typeof(CsvReader)).Location;
             var microsoftCodeAnalysisAssembly   = Assembly.GetAssembly(typeof(SyntaxFacts)).Location;
-            var dataProviderAssembly            = Assembly.GetAssembly(typeof(DataProvider)).Location;
+            var dataProviderAssembly            = Assembly.GetAssembly(typeof(CsvDataProvider<ExpandoObject>)).Location;
 
             var referencedAssemblies = new[] { csvHelperAssembly, microsoftCodeAnalysisAssembly, dataProviderAssembly };
 

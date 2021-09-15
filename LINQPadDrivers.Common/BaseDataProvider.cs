@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Davidlep.LINQPadDrivers.Common
 {
@@ -33,10 +34,10 @@ namespace Davidlep.LINQPadDrivers.Common
                 .SelectMany(x => x);
         }
 
-        public async Task<IEnumerable<TRecord>> GetRecordsFromURL(string requestUri)
+        public IEnumerable<TRecord> GetRecordsFromURL(string requestUri)
         {
             var httpClient = new HttpClient();
-            using var s = await httpClient.GetStreamAsync(requestUri);
+            using var s = Task.Run(() => httpClient.GetStreamAsync(requestUri)).Result;
             using var sr = new StreamReader(s);
             
             return GetRecords(sr);

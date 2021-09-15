@@ -1,0 +1,29 @@
+﻿<Window x:Class="Davidlep.LINQPadDrivers.SimpleCsvDriver.DataSourcesConnectionDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Simple CSV Data Connection"
+    Background="{x:Static SystemColors.ControlBrush}"
+    SizeToContent="Height"
+    Width="400" 
+    WindowStartupLocation="CenterScreen"
+    ResizeMode="NoResize">
+    <StackPanel Margin="12">
+
+        
+        <DockPanel LastChildFill="False" Margin="0,0,0,0">
+            <Label Padding="0,0,0,5">Choose a data source:</Label>
+            <Button Name="btnSettings" DockPanel.Dock="Right" Content="⚙" Margin="0,0,0,0" Padding="0,0" MinWidth="30" MaxWidth="30" IsCancel="True" TabIndex="3" Width="30" />
+        </DockPanel>
+        <DockPanel LastChildFill="True" Margin="0,0,0,10"/>
+        <Button Content="File 📄" Height="30" Width="200" Margin="0,0,0,10"/>
+        <Button Content="Directory 📂" Height="30" Width="200" Margin="0,0,0,10"/>
+        <Button Content="Clipboard 🗒" Height="30" Width="200" Margin="0,0,0,10"/>
+        <Button Content="URL 🌐" Height="30" Width="200" Margin="0,0,0,10"/>
+        <DockPanel LastChildFill="False" Margin="0,0,0,10"/>
+        <DockPanel LastChildFill="False" Margin="0,15,0,0">
+            <CheckBox IsChecked="{Binding ConnectionInfo.Persist}" VerticalAlignment="Center">Remember this connection</CheckBox>
+            <Button Name="btnCancel" DockPanel.Dock="Right" Content="Cancel" Margin="6,0,0,0" Padding="10,3" MinWidth="80" IsCancel="True" TabIndex="3" />
+        </DockPanel>
+
+    </StackPanel>
+</Window>

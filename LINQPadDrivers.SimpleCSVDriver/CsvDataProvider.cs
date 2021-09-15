@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
 {
-    public abstract class CsvDataProvider<TRecord> : BaseDataProvider<TRecord>
+    public class CsvDataProvider<TRecord> : BaseDataProvider<TRecord>
     {
         public override IEnumerable<TRecord> GetRecords(StreamReader sr)
         {

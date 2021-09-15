@@ -5,11 +5,11 @@ using Microsoft.Win32;
 
 namespace Davidlep.LINQPadDrivers.SimpleCsvDriver
 {
-    public partial class ConnectionDialog : Window
+    public partial class DataSourcesConnectionDialog : Window
 	{
 		readonly IConnectionInfo connectionInfo;
 
-		public ConnectionDialog(IConnectionInfo connectionInfo)
+		public DataSourcesConnectionDialog(IConnectionInfo connectionInfo)
 		{
 			this.connectionInfo = connectionInfo;
 			DataContext = new ConnectionProperties(connectionInfo);
